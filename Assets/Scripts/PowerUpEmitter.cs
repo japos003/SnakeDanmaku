@@ -18,10 +18,7 @@ public class PowerUpEmitter : MonoBehaviour {
         RIGHT
     }
 
-
-
     public GameObject powerup;
-    //public GameObject enemy;
 
     public EmitterType typeOfEmitter;
     public EmitterDirection emitterPosition;
@@ -33,6 +30,7 @@ public class PowerUpEmitter : MonoBehaviour {
 
     public float vertical_direction;
     public float horizontal_direction;
+    public float time_limit;
 
     private float time;
 	// Use this for initialization
@@ -68,32 +66,13 @@ public class PowerUpEmitter : MonoBehaviour {
 
         time = 0.0f;
 	}
+
+    public void EmitPowerUp()
+    {
+        GameObject emittedObject = Instantiate(powerup, transform.position, orientation);
+        emittedObject.GetComponent<PowerUpScript>().powerupDirection = emitterPosition;
+        emittedObject.GetComponent<PowerUpScript>().speed = objectSpeed;
+        emittedObject.GetComponent<PowerUpScript>().powerUpType = typeOfEmitter;
+    }
 	
-	// Update is called once per frame
-	void Update () {
-
-        time += Time.deltaTime;
-
-        if(time >= 2.0f)
-        {
-            GameObject emittedObject = Instantiate(powerup, transform.position, orientation);
-            emittedObject.GetComponent<PowerUpScript>().powerupDirection = emitterPosition;
-            emittedObject.GetComponent<PowerUpScript>().speed = objectSpeed;
-            emittedObject.GetComponent<PowerUpScript>().powerUpType = typeOfEmitter;
-
-            switch (typeOfEmitter)
-            {
-                case EmitterType.POWERUP:
-                    //Powerup
-                    break;
-                case EmitterType.ENEMY:
-
-                    break;
-            }
-                
-            time = 0.0f;
-
-        }
-        
-	}
 }

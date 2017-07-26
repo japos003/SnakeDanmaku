@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Obsolete("Please use PowerUpScript.cs instead")]
 public class EnemyScript : MonoBehaviour {
 
     public float horizontal = 0.0f;
@@ -54,7 +55,7 @@ public class EnemyScript : MonoBehaviour {
 
         if (distance_from_player < 10.0f)
         {
-            Debug.Log("distance: " + transform.position.x + " " + transform.position.y);
+            //Debug.Log("distance: " + transform.position.x + " " + transform.position.y);
             transform.position = Vector3.Lerp(transform.position, player.transform.position, 0.05f);
         }
         else

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PowerUpScript : MonoBehaviour {
 
@@ -55,7 +56,7 @@ public class PowerUpScript : MonoBehaviour {
 
         if (distance_from_player < 10.0f)
         {
-            Debug.Log("distance: " + transform.position.x + " " + transform.position.y);
+            //Debug.Log("distance: " + transform.position.x + " " + transform.position.y);
             transform.position = Vector3.Lerp(transform.position, player.transform.position, 0.01f);
         }
         else
@@ -73,29 +74,37 @@ public class PowerUpScript : MonoBehaviour {
 
     }
 
-    private void OnTriggerEnter(Collider collision)
+    //private void OnTriggerEnter(Collider collision)
+    //{
+    //    if(collision.tag == "Player")
+    //        DisappearAfterContact();
+    //}
+
+    public void DisappearAfterContact()
     {
-        if(collision.tag == "Player")
+        if (powerUpType == PowerUpEmitter.EmitterType.ENEMY)
         {
-            if(powerUpType == PowerUpEmitter.EmitterType.ENEMY)
+            GameObject player = GameObject.Find("Player");
+
+            int last_Member = player.GetComponent<PlayerMovement>().followers.Count - 1;
+
+            if (last_Member >= 0)
             {
-                int last_Member = collision.GetComponent<PlayerMovement>().followers.Count - 1;
-
-                if (last_Member >= 0)
-                {
-                    collision.GetComponent<PlayerMovement>().followers[last_Member].SetActive(false);
-                    Destroy(collision.GetComponent<PlayerMovement>().followers[last_Member]);
-                    collision.GetComponent<PlayerMovement>().followers.RemoveAt(last_Member);
-                }
-                else
-                {
-                    //Player dies
-                }
+                player.gameObject.GetComponent<PlayerMovement>().loseLastFollower();
             }
-
-            Debug.Log("hit");
-            this.gameObject.SetActive(false);
-            Destroy(this);
+            else
+            {
+                //Player dies
+            }
         }
+
+
+        destroyPowerUp();
+    }
+
+    private void destroyPowerUp()
+    {
+        this.gameObject.SetActive(false);
+        Destroy(this);
     }
 }

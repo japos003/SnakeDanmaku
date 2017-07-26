@@ -14,11 +14,8 @@ public class FollowerScript : MonoBehaviour {
 
         ordinal_position = player.GetComponent<PlayerMovement>().getFollowerNumber();
 
-        gameObject.transform.position = new Vector3(
-                player.transform.position.x - (2.0f * ordinal_position - (1.0f-ordinal_position)/ordinal_position),
-                player.transform.position.y,
-                0
-                );
+        gameObject.transform.position = player.transform.position; 
+       
 
 
 	}
@@ -30,21 +27,16 @@ public class FollowerScript : MonoBehaviour {
 
         player = GameObject.Find("Player");
 
-        player_location = new Vector3(
-            player.transform.position.x - (2.0f * ordinal_position - (1.0f - ordinal_position) / ordinal_position),
-            player.transform.position.y,
-            0
-        );
-        gameObject.transform.position = Vector3.Lerp(transform.position, player_location, 1.0f / (ordinal_position*ordinal_position) );
+        gameObject.transform.position = Vector3.Lerp(transform.position, player.transform.position, 1.0f / (4 * ordinal_position*ordinal_position) );
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        other.gameObject.GetComponent<PowerUpScript>().DisappearAfterContact();
+
         if (other.GetComponent<PowerUpScript>().powerUpType == PowerUpEmitter.EmitterType.ENEMY)
         {
-            int curr_pos = player.GetComponent<PlayerMovement>().followers.IndexOf(this.gameObject);
-            player.GetComponent<PlayerMovement>().followers.Remove(this.gameObject);
-            this.gameObject.SetActive(false);
+            player.GetComponent<PlayerMovement>().loseFollower(this.gameObject);
         }
 
         if(other.GetComponent<PowerUpScript>().powerUpType == PowerUpEmitter.EmitterType.POWERUP)

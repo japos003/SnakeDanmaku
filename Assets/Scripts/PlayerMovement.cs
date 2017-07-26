@@ -6,8 +6,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private Vector3 pos;
     public GameObject follower;
-
-    private int num_of_followers;
+    public GameController controller;
 
 
     public List<GameObject> followers;
@@ -16,7 +15,6 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
         pos = new Vector3();
         followers = new List<GameObject>();
-        num_of_followers = 0;
     }
 	
 	// Update is called once per frame
@@ -72,7 +70,9 @@ public class PlayerMovement : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<PowerUpScript>().powerUpType == PowerUpEmitter.EmitterType.POWERUP)
+        other.GetComponent<PowerUpScript>().DisappearAfterContact();
+
+        if (other.GetComponent<PowerUpScript>().powerUpType == PowerUpEmitter.EmitterType.POWERUP)
         {
             addFollower();
         }
@@ -91,6 +91,27 @@ public class PlayerMovement : MonoBehaviour {
                     )
                 );
         }
+
+        controller.UpdateScore(10);
+
+    }
+
+    public void loseLastFollower()
+    {
+        int last_Member = followers.Count - 1;
+
+        followers[last_Member].SetActive(false);
+        Destroy(followers[last_Member]);
+        followers.RemoveAt(last_Member);
+        controller.UpdateScore(-5);
+    }
+
+    public void loseFollower(GameObject follower)
+    {
+        int curr_pos = followers.IndexOf(follower);
+        follower.SetActive(false);
+        followers.Remove(follower);
+        controller.UpdateScore(-5);
     }
 
     public int getFollowerNumber()
@@ -103,4 +124,8 @@ public class PlayerMovement : MonoBehaviour {
         return followers.IndexOf(follower);
     }
 
+    public GameObject getFollower(int order)
+    {
+        return followers[order];
+    }
 }
