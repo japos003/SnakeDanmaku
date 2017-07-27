@@ -69,8 +69,7 @@ public class GameController : MonoBehaviour {
             emitter.gameObject.transform.position += new Vector3(
                 emitter.GetComponent<PowerUpEmitter>().horizontal_direction * Time.deltaTime,
                 emitter.GetComponent<PowerUpEmitter>().vertical_direction * Time.deltaTime);
-        }
-    } 
+        } 
 
 
         //Time

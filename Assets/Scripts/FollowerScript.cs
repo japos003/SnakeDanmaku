@@ -27,7 +27,7 @@ public class FollowerScript : MonoBehaviour {
 
         player = GameObject.Find("Player");
 
-        gameObject.transform.position = Vector3.Lerp(transform.position, player.transform.position, 1.0f / (4 * ordinal_position*ordinal_position) );
+        gameObject.transform.position = Vector3.Lerp(transform.position, player.transform.position, 1.0f / (3.5f * ordinal_position*ordinal_position) );
     }
 
     private void OnTriggerEnter(Collider other)

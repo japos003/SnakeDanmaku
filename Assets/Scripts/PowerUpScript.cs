@@ -95,6 +95,7 @@ public class PowerUpScript : MonoBehaviour {
             else
             {
                 //Player dies
+                Debug.Log("Game over!");
             }
         }
 

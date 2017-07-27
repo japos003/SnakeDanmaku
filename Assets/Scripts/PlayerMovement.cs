@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class PlayerMovement : MonoBehaviour {
 
     private Vector3 pos;
+    private bool noFollowers = true;
     public GameObject follower;
     public GameController controller;
 
@@ -76,10 +77,12 @@ public class PlayerMovement : MonoBehaviour {
         {
             addFollower();
         }
+        
     }
 
     public void addFollower()
     {
+        noFollowers = false;
         if (followers.Count < 5)
         {
             followers.Add(
@@ -104,6 +107,9 @@ public class PlayerMovement : MonoBehaviour {
         Destroy(followers[last_Member]);
         followers.RemoveAt(last_Member);
         controller.UpdateScore(-5);
+
+        if (followers.Count == 0)
+            noFollowers = true;
     }
 
     public void loseFollower(GameObject follower)
@@ -112,6 +118,9 @@ public class PlayerMovement : MonoBehaviour {
         follower.SetActive(false);
         followers.Remove(follower);
         controller.UpdateScore(-5);
+
+        if (followers.Count == 0)
+            noFollowers = true;
     }
 
     public int getFollowerNumber()
