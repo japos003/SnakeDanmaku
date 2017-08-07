@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour {
 
     private Vector3 pos;
     private bool noFollowers = true;
+
+    public bool isDead = false;
     public GameObject follower;
     public GameController controller;
 

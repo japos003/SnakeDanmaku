@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/SnakeDanmaku.unity
+- path: Assets/Scenes/SnakeDanmakuTitleScreen.unity
   isLoaded: 1
   isActive: 1

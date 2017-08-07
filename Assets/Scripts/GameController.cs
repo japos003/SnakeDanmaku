@@ -10,7 +10,8 @@ public class GameController : MonoBehaviour {
     public float time_limit;
     public GameObject player;
 
-    public Text cGameUI;
+    public Text gameUI;
+    public Text gameOverText;
 
     public int score;
 
@@ -24,6 +25,7 @@ public class GameController : MonoBehaviour {
         time_limit = 4.5f;
         time = 0.0f;
         score = 0;
+        gameOverText.text = "";
 	}
 	
 	// Update is called once per frame
@@ -90,11 +92,19 @@ public class GameController : MonoBehaviour {
 
             time = 0.0f;
 
-            score = player.GetComponent<PlayerMovement>().followers.Count > 0 ?
-                (score + player.GetComponent<PlayerMovement>().followers.Count) : (score + 1);
-
-            cGameUI.text = "Score: " + score;
+            if (!player.GetComponent<PlayerMovement>().isDead)
+                UpdateScore(player.GetComponent<PlayerMovement>().followers.Count > 0 ?
+                    player.GetComponent<PlayerMovement>().followers.Count : 1);
+            gameUI.text = "Score: " + score;
             
+        }
+
+        if(player.GetComponent<PlayerMovement>().isDead)
+        {
+            Debug.Log("Game Over!");
+            gameOverText.text = "GAME OVER";
+            player.GetComponent<PlayerMovement>().gameObject.GetComponent<Renderer>().material.color = Color.red;
+            StartCoroutine(ReturnToTitleScreen());
         }
 
 
@@ -102,7 +112,14 @@ public class GameController : MonoBehaviour {
 
     public void UpdateScore(int _score)
     {
-        score += _score;
-        cGameUI.text = "Score: " + score;
+        if(!player.GetComponent<PlayerMovement>().isDead)
+            score += _score;
+        gameUI.text = "Score: " + score;
+    }
+
+    private IEnumerator ReturnToTitleScreen()
+    {
+        yield return new WaitForSeconds(3f);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("SnakeDanmakuTitleScreen");
     }
 }
