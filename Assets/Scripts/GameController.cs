@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour {
 
     private float total_time;
     private float time;
+    private bool canDisplayStageStatus;
 
 
 	// Use this for initialization
@@ -26,6 +27,8 @@ public class GameController : MonoBehaviour {
         time = 0.0f;
         score = 0;
         gameOverText.text = "";
+        canDisplayStageStatus = false;
+        StartCoroutine(DisplayStageStatus(1));
 	}
 	
 	// Update is called once per frame
@@ -78,10 +81,52 @@ public class GameController : MonoBehaviour {
         time += Time.deltaTime;
         total_time += Time.deltaTime;
 
-        if (total_time >= 10.0f && total_time <= 20.0f)
+        if (total_time >= 30.0f && total_time <= 60.0f)
+        {
+            if (total_time < 33.0f)
+            {
+                StartCoroutine(DisplayStageStatus(2));
+            }
+            
+            time_limit = 4.0f;
+        }
+            
+        if (total_time >= 60.0f && total_time <= 90.0f)
+        {
             time_limit = 3.0f;
-        if (total_time >= 20.0f)
+            if (total_time < 63.0f)
+            {
+                StartCoroutine(DisplayStageStatus(3));
+            }
+        }
+            
+        if (total_time >= 90.0f && total_time <= 120.0f)
+        {
+            if (total_time < 93.0f)
+            {
+                StartCoroutine(DisplayStageStatus(4));
+            }
             time_limit = 2.0f;
+        }
+
+        if (total_time >= 120.0f && total_time <= 150.0f){
+            if (total_time < 123.0f)
+            {
+                StartCoroutine(DisplayStageStatus(5));
+            }
+            time_limit = 1.5f;
+        }
+            
+        if (total_time > 150.0f)
+        {
+            if (total_time < 153.0f)
+            {
+                StartCoroutine(DisplayStageStatus(6));
+            }
+            time_limit = 1.0f;
+        }
+            
+
 
         if (time >= time_limit)
         {
@@ -121,5 +166,13 @@ public class GameController : MonoBehaviour {
     {
         yield return new WaitForSeconds(3f);
         UnityEngine.SceneManagement.SceneManager.LoadScene("SnakeDanmakuTitleScreen");
+    }
+
+    private IEnumerator DisplayStageStatus(int stage)
+    {
+        gameOverText.text = "Stage " + stage.ToString();
+        yield return new WaitForSeconds(3f);
+        gameOverText.text = "";
+
     }
 }
