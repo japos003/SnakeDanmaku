@@ -50,16 +50,23 @@ public class PowerUpScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        GameObject player = GameObject.FindWithTag("Player");
-
-        float distance_from_player = (transform.position - player.transform.position).sqrMagnitude;
-
-        if (distance_from_player < 10.0f)
+        if(powerUpType == PowerUpEmitter.EmitterType.ENEMY || powerUpType == PowerUpEmitter.EmitterType.POWERUP)
         {
-            //Debug.Log("distance: " + transform.position.x + " " + transform.position.y);
-            transform.position = Vector3.Lerp(transform.position, player.transform.position, 0.01f);
+            GameObject player = GameObject.FindWithTag("Player");
+
+            float distance_from_player = (transform.position - player.transform.position).sqrMagnitude;
+
+            if (distance_from_player < 10.0f)
+            {
+                //Debug.Log("distance: " + transform.position.x + " " + transform.position.y);
+                transform.position = Vector3.Lerp(transform.position, player.transform.position, 0.01f);
+            }
+            else
+            {
+                transform.position += new Vector3(horizontal * Time.deltaTime, vertical * Time.deltaTime, 0);
+            }
         }
-        else
+        else if (powerUpType == PowerUpEmitter.EmitterType.BULLET)
         {
             transform.position += new Vector3(horizontal * Time.deltaTime, vertical * Time.deltaTime, 0);
         }
@@ -73,6 +80,8 @@ public class PowerUpScript : MonoBehaviour {
         }
 
     }
+
+
 
     //private void OnTriggerEnter(Collider collision)
     //{

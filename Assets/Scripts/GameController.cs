@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-    public GameObject[] emitters;
+    public GameObject[] moving_emitters;
+    public GameObject[] stationary_emitters;
     public float time_limit;
     public GameObject player;
 
@@ -18,6 +19,7 @@ public class GameController : MonoBehaviour {
     private float total_time;
     private float time;
     private bool canDisplayStageStatus;
+    private bool StationaryEmittersAreOn;
 
 
 	// Use this for initialization
@@ -28,13 +30,14 @@ public class GameController : MonoBehaviour {
         score = 0;
         gameOverText.text = "";
         canDisplayStageStatus = false;
+        StationaryEmittersAreOn = false;
         StartCoroutine(DisplayStageStatus(1));
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-        foreach (GameObject emitter in emitters)
+        foreach (GameObject emitter in moving_emitters)
         {
             if (emitter == null)
             {
@@ -81,6 +84,7 @@ public class GameController : MonoBehaviour {
         time += Time.deltaTime;
         total_time += Time.deltaTime;
 
+
         if (total_time >= 30.0f && total_time <= 60.0f)
         {
             if (total_time < 33.0f)
@@ -97,6 +101,7 @@ public class GameController : MonoBehaviour {
             if (total_time < 63.0f)
             {
                 StartCoroutine(DisplayStageStatus(3));
+                StationaryEmittersAreOn = true;
             }
         }
             
@@ -130,10 +135,13 @@ public class GameController : MonoBehaviour {
 
         if (time >= time_limit)
         {
-            foreach(GameObject emitter in emitters)
+            foreach(GameObject emitter in moving_emitters)
             {
                 emitter.gameObject.GetComponent<PowerUpEmitter>().EmitPowerUp();
             }
+
+            if(StationaryEmittersAreOn)
+                TurnOnStationeryEmitters((int)total_time);
 
             time = 0.0f;
 
@@ -153,6 +161,18 @@ public class GameController : MonoBehaviour {
         }
 
 
+    }
+
+    private void TurnOnStationeryEmitters(int time)
+    {
+        System.Random random = new System.Random();
+        foreach (GameObject emitter in stationary_emitters)
+        {
+            Debug.Log("stationary_emitters length: " + stationary_emitters.Length);
+            emitter.gameObject.GetComponent<PowerUpEmitter>().SwitchBulletDirection(random.Next(0, (int)total_time) % 4);
+            emitter.gameObject.GetComponent<PowerUpEmitter>().EmitPowerUp();
+
+        }
     }
 
     public void UpdateScore(int _score)

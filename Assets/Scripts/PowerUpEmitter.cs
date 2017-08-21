@@ -7,7 +7,8 @@ public class PowerUpEmitter : MonoBehaviour {
     public enum EmitterType
     {
         POWERUP,
-        ENEMY
+        ENEMY,
+        BULLET
     }
 
     public enum EmitterDirection
@@ -66,6 +67,25 @@ public class PowerUpEmitter : MonoBehaviour {
 
         time = 0.0f;
 	}
+
+    public void SwitchBulletDirection(int second)
+    {
+        switch (second)
+        {
+            case 0:
+                emitterPosition = EmitterDirection.DOWN;
+                break;
+            case 1:
+                emitterPosition = EmitterDirection.LEFT;
+                break;
+            case 2:
+                emitterPosition = EmitterDirection.UP;
+                break;
+            default:
+                emitterPosition = EmitterDirection.RIGHT;
+                break;
+        }
+    }
 
     public void EmitPowerUp()
     {
