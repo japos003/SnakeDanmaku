@@ -23,21 +23,6 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        bool button_down = false;
-
-        //Movement
-        //if(Input.GetKeyDown(KeyCode.UpArrow))
-        //       gameObject.transform.Translate(new Vector3(0.0f, 1.0f, 0));
-        //   if (Input.GetKeyDown(KeyCode.DownArrow))
-        //       gameObject.transform.Translate(new Vector3(0.0f, -1.0f, 0));
-        //   if (Input.GetKeyDown(KeyCode.RightArrow))
-        //       gameObject.transform.Translate(new Vector3(1.0f, 0, 0));
-        //   if (Input.GetKeyDown(KeyCode.LeftArrow))
-        //       gameObject.transform.Translate(new Vector3(-1.0f, 0, 0));
-
-        
-
-
         if (Input.GetMouseButton(0))
         {
             var mousePosition = Input.mousePosition;
@@ -45,29 +30,10 @@ public class PlayerMovement : MonoBehaviour {
             mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
             pos = mousePosition;
+            gameObject.transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePosition - gameObject.transform.position);
         }
 
         gameObject.transform.position = Vector3.Lerp(transform.position, pos, 0.05f);
-
-        //Input.mousePosition
-
-        //Changes color of object
-         if (Input.GetKey(KeyCode.Space))
-        {
-            
-            gameObject.GetComponent<Renderer>().material.color = new Color(0, 0, 255);
-            if (Input.GetKeyDown(KeyCode.Space) && button_down == false)
-            {
-                button_down = true;
-            }
-            
-        }       
-        else
-        {
-            gameObject.GetComponent<Renderer>().material.color = new Color(255, 255, 255);
-        }
-
-        button_down = false;
 
     }
 

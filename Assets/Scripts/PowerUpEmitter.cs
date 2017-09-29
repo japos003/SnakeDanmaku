@@ -68,6 +68,15 @@ public class PowerUpEmitter : MonoBehaviour {
         time = 0.0f;
 	}
 
+    public void ChangeType()
+    {
+        System.Random random = new System.Random();
+        int random_number = random.Next(0, 2);
+
+        //Temporary, will change to switch if more EmitterType
+        typeOfEmitter = random_number == 0 ? EmitterType.ENEMY : EmitterType.POWERUP;
+    }
+
     public void SwitchBulletDirection(int second)
     {
         switch (second)

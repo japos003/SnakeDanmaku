@@ -37,48 +37,7 @@ public class GameController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        foreach (GameObject emitter in moving_emitters)
-        {
-            if (emitter == null)
-            {
-                Debug.Log("error...");
-            }
-
-            Debug.Log(emitter.name);
-
-            switch (emitter.GetComponent<PowerUpEmitter>().emitterPosition)
-            {
-                case PowerUpEmitter.EmitterDirection.UP:
-                case PowerUpEmitter.EmitterDirection.DOWN:
-                    if (emitter.gameObject.transform.position.x >= 8.0f)
-                    {
-                        emitter.GetComponent<PowerUpEmitter>().horizontal_direction = -1.0f;
-                    }
-                    else if (emitter.gameObject.transform.position.x <= -8.0f)
-                    {
-                        emitter.GetComponent<PowerUpEmitter>().horizontal_direction = 1.0f;
-                    }
-
-                    break;
-                case PowerUpEmitter.EmitterDirection.LEFT:
-                case PowerUpEmitter.EmitterDirection.RIGHT:
-                    if (emitter.gameObject.transform.position.y >= 8.0f)
-                    {
-                        emitter.GetComponent<PowerUpEmitter>().vertical_direction = -1.0f;
-                    }
-                    else if (emitter.gameObject.transform.position.y <= -8.0f)
-                    {
-                        emitter.GetComponent<PowerUpEmitter>().vertical_direction = 1.0f;
-                    }
-
-                    break;
-            }
-
-            emitter.gameObject.transform.position += new Vector3(
-                emitter.GetComponent<PowerUpEmitter>().horizontal_direction * Time.deltaTime,
-                emitter.GetComponent<PowerUpEmitter>().vertical_direction * Time.deltaTime);
-        } 
-
+        UpdateEmitters();
 
         //Time
         time += Time.deltaTime;
@@ -138,6 +97,7 @@ public class GameController : MonoBehaviour {
             foreach(GameObject emitter in moving_emitters)
             {
                 emitter.gameObject.GetComponent<PowerUpEmitter>().EmitPowerUp();
+                emitter.gameObject.GetComponent<PowerUpEmitter>().ChangeType();
             }
 
             if(StationaryEmittersAreOn)
@@ -152,14 +112,7 @@ public class GameController : MonoBehaviour {
             
         }
 
-        if(player.GetComponent<PlayerMovement>().isDead)
-        {
-            Debug.Log("Game Over!");
-            gameOverText.text = "GAME OVER";
-            player.GetComponent<PlayerMovement>().gameObject.GetComponent<Renderer>().material.color = Color.red;
-            StartCoroutine(ReturnToTitleScreen());
-        }
-
+        CheckPlayerDeath();
 
     }
 
@@ -170,8 +123,65 @@ public class GameController : MonoBehaviour {
         {
             Debug.Log("stationary_emitters length: " + stationary_emitters.Length);
             emitter.gameObject.GetComponent<PowerUpEmitter>().SwitchBulletDirection(random.Next(0, (int)total_time) % 4);
+            emitter.gameObject.GetComponent<PowerUpEmitter>().ChangeType();
             emitter.gameObject.GetComponent<PowerUpEmitter>().EmitPowerUp();
 
+        }
+    }
+
+    private void UpdateEmitters()
+    {
+        foreach (GameObject emitter in moving_emitters)
+        {
+            if (emitter == null)
+            {
+                Debug.Log("error...");
+            }
+
+            Debug.Log(emitter.name);
+
+            switch (emitter.GetComponent<PowerUpEmitter>().emitterPosition)
+            {
+                case PowerUpEmitter.EmitterDirection.UP:
+                case PowerUpEmitter.EmitterDirection.DOWN:
+                    if (emitter.gameObject.transform.position.x >= 8.0f)
+                    {
+                        emitter.GetComponent<PowerUpEmitter>().horizontal_direction = -1.0f;
+                    }
+                    else if (emitter.gameObject.transform.position.x <= -8.0f)
+                    {
+                        emitter.GetComponent<PowerUpEmitter>().horizontal_direction = 1.0f;
+                    }
+
+                    break;
+                case PowerUpEmitter.EmitterDirection.LEFT:
+                case PowerUpEmitter.EmitterDirection.RIGHT:
+                    if (emitter.gameObject.transform.position.y >= 8.0f)
+                    {
+                        emitter.GetComponent<PowerUpEmitter>().vertical_direction = -1.0f;
+                    }
+                    else if (emitter.gameObject.transform.position.y <= -8.0f)
+                    {
+                        emitter.GetComponent<PowerUpEmitter>().vertical_direction = 1.0f;
+                    }
+
+                    break;
+            }
+
+            emitter.gameObject.transform.position += new Vector3(
+                emitter.GetComponent<PowerUpEmitter>().horizontal_direction * Time.deltaTime,
+                emitter.GetComponent<PowerUpEmitter>().vertical_direction * Time.deltaTime);
+        }
+    }
+
+    private void CheckPlayerDeath()
+    {
+        if (player.GetComponent<PlayerMovement>().isDead)
+        {
+            Debug.Log("Game Over!");
+            gameOverText.text = "GAME OVER";
+            player.GetComponent<PlayerMovement>().gameObject.GetComponent<Renderer>().material.color = Color.red;
+            StartCoroutine(ReturnToTitleScreen());
         }
     }
 
